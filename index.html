@@ -3,9 +3,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#102d21">
-<meta name="description" content="O Safári do Ravi Noah — Primeiro Aninho! 18 de abril de 2027.">
 <title>O Safári do Ravi Noah | 1 Aninho</title>
 
 <style>
@@ -24,7 +23,7 @@ body {
   color:var(--creme);
 }
 [hidden] {display:none!important}
-button,a { -webkit-tap-highlight-color:transparent }
+button,a {-webkit-tap-highlight-color:transparent}
 button {cursor:pointer;font:inherit}
 a {text-decoration:none}
 button:focus-visible,a:focus-visible,input:focus-visible {
@@ -34,6 +33,7 @@ button:focus-visible,a:focus-visible,input:focus-visible {
 
 /* CAPA */
 #cover {
+  min-height:100vh;
   min-height:100svh;
   display:flex;
   justify-content:center;
@@ -41,17 +41,10 @@ button:focus-visible,a:focus-visible,input:focus-visible {
   padding:30px 20px 9vh;
   text-align:center;
   background:
-    linear-gradient(
-      to bottom,
-      transparent 35%,
-      rgba(5,24,12,.95)
-    ),
+    linear-gradient(to bottom,transparent 35%,rgba(5,24,12,.95)),
     url("portao.jpg") center/cover no-repeat;
 }
-.cover-content {
-  width:100%;
-  max-width:420px;
-}
+.cover-content {width:100%;max-width:420px}
 .cover-content p {
   color:#ffe5af;
   font-size:13px;
@@ -59,20 +52,25 @@ button:focus-visible,a:focus-visible,input:focus-visible {
   text-shadow:0 2px 5px #000;
 }
 .primary {
+  display:block;
   width:100%;
+  position:relative;
+  z-index:2;
   border:1px solid #ffe4a0;
   border-radius:40px;
-  padding:17px 20px;
+  padding:18px 20px;
   color:#2c281a;
   background:linear-gradient(135deg,#ffe5ab,#c79d57);
   font-weight:bold;
   font-size:16px;
   box-shadow:0 8px 25px #0008;
+  touch-action:manipulation;
 }
 
 /* VÍDEO */
 #moviePage {
   display:none;
+  min-height:100vh;
   min-height:100svh;
   background:#030806;
   flex-direction:column;
@@ -83,35 +81,27 @@ button:focus-visible,a:focus-visible,input:focus-visible {
 }
 #movie {
   width:100%;
-  max-height:85svh;
+  max-height:80svh;
   object-fit:contain;
+  background:#000;
 }
 .secondary {
   background:transparent;
   border:1px solid var(--dourado);
   color:var(--dourado);
   border-radius:30px;
-  padding:12px 18px;
+  padding:13px 18px;
   font-size:14px;
 }
 
 /* CONVITE */
 #details {
   display:none;
-  min-height:100svh;
+  min-height:100vh;
   padding:40px 17px 60px;
-  background:
-    radial-gradient(
-      ellipse at top,
-      #2c6242 0%,
-      #102d21 65%
-    );
+  background:radial-gradient(ellipse at top,#2c6242 0%,#102d21 65%);
 }
-main {
-  max-width:500px;
-  margin:auto;
-  text-align:center;
-}
+main {max-width:500px;margin:auto;text-align:center}
 .crown {font-size:38px}
 .eyebrow {
   font-family:Arial,sans-serif;
@@ -127,10 +117,7 @@ h1 {
   margin:12px 0;
 }
 h2 {color:var(--dourado)}
-.subtitle {
-  font-size:21px;
-  color:#f4d599;
-}
+.subtitle {font-size:21px;color:#f4d599}
 .event {
   margin:26px 0;
   padding:23px 12px;
@@ -140,19 +127,12 @@ h2 {color:var(--dourado)}
   font-size:16px;
 }
 .event strong {color:#ffe2a5}
-.event .venue {
-  color:var(--dourado);
-  font-weight:bold;
-}
+.venue {color:var(--dourado);font-weight:bold}
 
-/* FOTO E BOAS-VINDAS */
+/* FOTO DO RAVI */
 .welcome {
   margin:24px 0 28px;
-  background:linear-gradient(
-    155deg,
-    #27583d,
-    #143728
-  );
+  background:linear-gradient(155deg,#27583d,#143728);
   border:1px solid #c9a866;
   border-radius:23px;
   overflow:hidden;
@@ -160,12 +140,7 @@ h2 {color:var(--dourado)}
 }
 .photo-frame {
   padding:11px;
-  background:linear-gradient(
-    135deg,
-    #f0d49b,
-    #a47c3d,
-    #f6dda6
-  );
+  background:linear-gradient(135deg,#f0d49b,#a47c3d,#f6dda6);
 }
 .photo-frame img {
   width:100%;
@@ -173,9 +148,7 @@ h2 {color:var(--dourado)}
   display:block;
   border-radius:13px;
 }
-.welcome-text {
-  padding:24px 21px 28px;
-}
+.welcome-text {padding:24px 21px 28px}
 .welcome-text h2 {
   font-size:27px;
   line-height:1.25;
@@ -194,14 +167,9 @@ h2 {color:var(--dourado)}
   margin-top:18px;
 }
 
-/* CINCO BOTÕES */
-.buttons {
-  display:grid;
-  gap:12px;
-  margin:25px 0;
-}
-.buttons button,
-.buttons a {
+/* BOTÕES */
+.buttons {display:grid;gap:12px;margin:25px 0}
+.buttons button,.buttons a {
   display:block;
   width:100%;
   padding:16px 13px;
@@ -215,11 +183,7 @@ h2 {color:var(--dourado)}
   text-align:center;
 }
 .buttons .eu-vou-nav {
-  background:linear-gradient(
-    135deg,
-    #ffe6ad,
-    #c79c54
-  );
+  background:linear-gradient(135deg,#ffe6ad,#c79c54);
   border:2px solid #ffe5a7;
   box-shadow:0 7px 20px #0005;
   padding:18px 12px;
@@ -242,11 +206,7 @@ h2 {color:var(--dourado)}
   color:#273e2d;
   text-align:left;
 }
-.panel h2 {
-  color:#385c40;
-  text-align:center;
-  margin-top:0;
-}
+.panel h2 {color:#385c40;text-align:center;margin-top:0}
 .panel p {
   font-family:Arial,sans-serif;
   line-height:1.65;
@@ -293,17 +253,10 @@ h2 {color:var(--dourado)}
   margin:16px 0;
 }
 
-/* EXPERIÊNCIAS DA FESTA */
-.experiences {
-  margin:23px 0;
-}
-.experiences-header {
-  padding:15px 8px;
-}
-.experiences-header h2 {
-  font-size:29px;
-  margin:10px 0;
-}
+/* EXPERIÊNCIAS */
+.experiences {margin:23px 0}
+.experiences-header {padding:15px 8px}
+.experiences-header h2 {font-size:29px;margin:10px 0}
 .experiences-header p {
   font-family:Arial,sans-serif;
   font-size:15px;
@@ -314,17 +267,11 @@ h2 {color:var(--dourado)}
   padding:22px 19px;
   border:1px solid #bfa26a;
   border-radius:19px;
-  background:linear-gradient(
-    155deg,
-    #28573f,
-    #153c2e
-  );
+  background:linear-gradient(155deg,#28573f,#153c2e);
   text-align:left;
   box-shadow:0 7px 22px #0004;
 }
-.experience-card .emoji {
-  font-size:28px;
-}
+.experience-card .emoji {font-size:28px}
 .experience-card h3 {
   font-size:21px;
   color:#f5d393;
@@ -341,16 +288,9 @@ h2 {color:var(--dourado)}
   border-radius:20px;
   padding:24px 19px;
   margin:15px 0;
-  background:linear-gradient(
-    155deg,
-    #25543b,
-    #123427
-  );
+  background:linear-gradient(155deg,#25543b,#123427);
 }
-.experience-finale h3 {
-  color:#f7d99b;
-  font-size:23px;
-}
+.experience-finale h3 {color:#f7d99b;font-size:23px}
 .experience-finale p {
   font-family:Arial,sans-serif;
   line-height:1.75;
@@ -372,16 +312,10 @@ h2 {color:var(--dourado)}
   padding:27px 20px;
   border:1px solid #e3c17c;
   border-radius:22px;
-  background:linear-gradient(
-    155deg,
-    #285b40,
-    #102f23
-  );
+  background:linear-gradient(155deg,#285b40,#102f23);
   box-shadow:0 10px 28px #0005;
 }
-.eu-vou-section h2 {
-  font-size:29px;
-}
+.eu-vou-section h2 {font-size:29px}
 .eu-vou-section p {
   font-family:Arial,sans-serif;
   font-size:15px;
@@ -391,11 +325,7 @@ h2 {color:var(--dourado)}
   display:block;
   margin:22px 0 12px;
   padding:17px;
-  background:linear-gradient(
-    135deg,
-    #ffe5ac,
-    #c69b53
-  );
+  background:linear-gradient(135deg,#ffe5ac,#c69b53);
   border-radius:35px;
   color:#293b28;
   font-family:Arial,sans-serif;
@@ -408,6 +338,161 @@ footer {
   font-size:12px;
 }
 </style>
+
+<script>
+/*
+  FUNÇÕES GLOBAIS:
+  O botão da capa funciona diretamente por onclick.
+  Assim, não depende do registro de um evento no fim da página.
+*/
+
+function mostrarConvite() {
+  var capa = document.getElementById("cover");
+  var paginaVideo = document.getElementById("moviePage");
+  var convite = document.getElementById("details");
+  var video = document.getElementById("movie");
+
+  if (video) {
+    try { video.pause(); } catch(e) {}
+  }
+
+  if (capa) capa.style.display = "none";
+  if (paginaVideo) paginaVideo.style.display = "none";
+  if (convite) convite.style.display = "block";
+
+  window.scrollTo(0,0);
+}
+
+function abrirAventura() {
+  var capa = document.getElementById("cover");
+  var paginaVideo = document.getElementById("moviePage");
+  var convite = document.getElementById("details");
+  var video = document.getElementById("movie");
+
+  if (!paginaVideo || !video) {
+    mostrarConvite();
+    return;
+  }
+
+  capa.style.display = "none";
+  convite.style.display = "none";
+  paginaVideo.style.display = "flex";
+  window.scrollTo(0,0);
+
+  try {
+    video.pause();
+    video.currentTime = 0;
+    video.controls = true;
+
+    var tentativa = video.play();
+
+    if (tentativa && typeof tentativa.catch === "function") {
+      tentativa.catch(function(erro) {
+        console.warn("Reprodução não iniciada:",erro);
+
+        /*
+          Mantém a tela do vídeo aberta.
+          A pessoa pode tocar no play ou
+          em "Ver informações da festa".
+        */
+        video.controls = true;
+      });
+    }
+  } catch(erro) {
+    console.warn("Erro ao abrir vídeo:",erro);
+    mostrarConvite();
+  }
+}
+
+function abrirPainel(id) {
+  var nomes = ["rsvp","gifts","experiences","euVou"];
+  var escolhido = document.getElementById(id);
+
+  if (!escolhido) return;
+
+  var abrir = escolhido.hidden;
+
+  nomes.forEach(function(nome) {
+    var painel = document.getElementById(nome);
+    if (painel) painel.hidden = true;
+  });
+
+  if (abrir) {
+    escolhido.hidden = false;
+    escolhido.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+}
+
+function fecharPainel(id) {
+  var painel = document.getElementById(id);
+  if (painel) painel.hidden = true;
+
+  var botoes = document.querySelector(".buttons");
+  if (botoes) {
+    botoes.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+}
+
+function confirmarPresenca() {
+  var nome = document.getElementById("guest").value.trim();
+  var adultos = Math.max(
+    0,
+    parseInt(document.getElementById("adults").value,10) || 0
+  );
+  var criancas = Math.max(
+    0,
+    parseInt(document.getElementById("kids").value,10) || 0
+  );
+
+  if (!nome) {
+    alert("Por favor, informe seu nome.");
+    document.getElementById("guest").focus();
+    return;
+  }
+
+  if (adultos + criancas === 0) {
+    alert("Informe quantas pessoas virão.");
+    return;
+  }
+
+  var mensagem =
+    "🌿🦁 Olá! Quero confirmar nossa presença " +
+    "no aniversário de 1 aninho do Ravi Noah!\n\n" +
+    "👤 Responsável: " + nome + "\n" +
+    "👨 Adultos: " + adultos + "\n" +
+    "🧒 Crianças: " + criancas + "\n\n" +
+    "🎉 Nos vemos nessa grande aventura!";
+
+  window.location.href =
+    "https://wa.me/5511937449606?text=" +
+    encodeURIComponent(mensagem);
+}
+
+function copiarPix() {
+  var chave = "11943403741";
+  var aviso = document.getElementById("copyState");
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(chave).then(function() {
+      aviso.textContent = "Chave Pix copiada! 💚";
+    }).catch(function() {
+      aviso.textContent = "Copie a chave acima: " + chave;
+    });
+  } else {
+    aviso.textContent = "Copie a chave acima: " + chave;
+  }
+}
+
+function reverAventura() {
+  abrirAventura();
+}
+</script>
 </head>
 
 <body>
@@ -415,33 +500,52 @@ footer {
 <!-- CAPA -->
 <section id="cover">
   <div class="cover-content">
+
     <p>UMA AVENTURA MUITO ESPECIAL ESPERA POR VOCÊ</p>
 
-    <button id="start" class="primary">
+    <button
+      type="button"
+      id="start"
+      class="primary"
+      onclick="abrirAventura()">
       🐾 Toque para começar a aventura
     </button>
 
     <p style="font-size:12px;letter-spacing:0">
       🔊 Ative o som para ouvir a história
     </p>
+
   </div>
 </section>
 
 <!-- VÍDEO -->
 <section id="moviePage">
+
   <video
     id="movie"
     playsinline
+    webkit-playsinline
     controls
     preload="metadata"
-    poster="portao.jpg">
-    <source src="aventura-ravi.mp4" type="video/mp4">
+    poster="portao.jpg"
+    onended="mostrarConvite()"
+    onerror="mostrarConvite()">
+
+    <source
+      src="aventura-ravi.mp4"
+      type="video/mp4">
+
     Seu navegador não suporta este vídeo.
   </video>
 
-  <button id="skip" class="secondary">
+  <button
+    type="button"
+    id="skip"
+    class="secondary"
+    onclick="mostrarConvite()">
     Ver informações da festa →
   </button>
+
 </section>
 
 <!-- CONVITE PRINCIPAL -->
@@ -456,36 +560,29 @@ footer {
 
   <h1>O Safári do<br>Ravi Noah</h1>
 
-  <div class="subtitle">
-    ✦ 1 Aninho ✦
-  </div>
+  <div class="subtitle">✦ 1 Aninho ✦</div>
 
-  <!-- INFORMAÇÕES DA FESTA -->
+  <!-- DATA E LOCAL -->
   <div class="event">
     <strong>Domingo, 18 de abril de 2027</strong><br>
     <strong>A partir das 12h</strong><br>
-    <span class="venue">
-      Espaço Recanto do Vale
-    </span><br>
+    <span class="venue">Espaço Recanto do Vale</span><br>
     Avenida Ouro Preto, 1660<br>
     Jardim Alegria — Francisco Morato/SP
   </div>
 
-  <!-- FOTO DO RAVI -->
+  <!-- FOTO E MENSAGEM DO RAVI -->
   <section class="welcome">
 
     <div class="photo-frame">
       <img
         src="ravi-safari.png"
-        alt="Ravi Noah com seus amiguinhos do safári"
-        loading="lazy">
+        alt="Ravi Noah com os animaizinhos do safári">
     </div>
 
     <div class="welcome-text">
 
-      <h2>
-        Oi! Que bom ver você por aqui! 💚
-      </h2>
+      <h2>Oi! Que bom ver você por aqui! 💚</h2>
 
       <p>
         Estou muito feliz em convidar você
@@ -519,10 +616,12 @@ footer {
     </div>
   </section>
 
-  <!-- OS CINCO BOTÕES -->
+  <!-- CINCO BOTÕES -->
   <div class="buttons">
 
-    <button type="button" id="rsvpBtn">
+    <button
+      type="button"
+      onclick="abrirPainel('rsvp')">
       💚 Confirmar presença
     </button>
 
@@ -533,18 +632,22 @@ footer {
       📍 Como chegar
     </a>
 
-    <button type="button" id="giftsBtn">
+    <button
+      type="button"
+      onclick="abrirPainel('gifts')">
       🎁 Sugestões de presentes
     </button>
 
-    <button type="button" id="experiencesBtn">
+    <button
+      type="button"
+      onclick="abrirPainel('experiences')">
       ✨ Experiências da Festa
     </button>
 
     <button
       type="button"
-      id="euVouBtn"
-      class="eu-vou-nav">
+      class="eu-vou-nav"
+      onclick="abrirPainel('euVou')">
 
       📸 Eu Vou ao Safári — Clique aqui!
 
@@ -557,7 +660,7 @@ footer {
 
   </div>
 
-  <!-- CONFIRMAÇÃO DE PRESENÇA -->
+  <!-- CONFIRMAR PRESENÇA -->
   <section id="rsvp" class="panel" hidden>
 
     <h2>Confirme sua presença 💚</h2>
@@ -573,35 +676,27 @@ footer {
       <input
         id="guest"
         type="text"
-        autocomplete="name"
-        placeholder="Nome do responsável">
+        placeholder="Nome do responsável"
+        autocomplete="name">
     </label>
 
     <div class="fieldrow">
 
       <label class="field">
         Adultos
-        <input
-          id="adults"
-          type="number"
-          min="0"
-          max="100"
-          value="1">
+        <input id="adults" type="number" min="0" value="1">
       </label>
 
       <label class="field">
         Crianças
-        <input
-          id="kids"
-          type="number"
-          min="0"
-          max="100"
-          value="0">
+        <input id="kids" type="number" min="0" value="0">
       </label>
 
     </div>
 
-    <button type="button" id="sendRsvp">
+    <button
+      type="button"
+      onclick="confirmarPresenca()">
       Enviar confirmação pelo WhatsApp ↗
     </button>
 
@@ -612,7 +707,7 @@ footer {
 
   </section>
 
-  <!-- SUGESTÕES DE PRESENTES -->
+  <!-- PRESENTES -->
   <section id="gifts" class="panel" hidden>
 
     <h2>Presentinhos para o Ravi 🎁</h2>
@@ -626,8 +721,7 @@ footer {
     <p>
       👕 <strong>Roupas:</strong> tamanho 2<br>
       👟 <strong>Sapatos:</strong> 19/20<br>
-      🧸 <strong>Brinquedos:</strong>
-      a partir de 1 ano
+      🧸 <strong>Brinquedos:</strong> a partir de 1 ano
     </p>
 
     <hr>
@@ -637,11 +731,11 @@ footer {
       <strong>Priscila dos Santos Souza</strong>
     </p>
 
-    <div class="pix">
-      11943403741
-    </div>
+    <div class="pix">11943403741</div>
 
-    <button type="button" id="copyPix">
+    <button
+      type="button"
+      onclick="copiarPix()">
       Copiar chave Pix
     </button>
 
@@ -654,17 +748,11 @@ footer {
   </section>
 
   <!-- EXPERIÊNCIAS DA FESTA -->
-  <!-- SOMENTE DESCRITIVOS, SEM LINKS -->
-  <section
-    id="experiences"
-    class="experiences"
-    hidden>
+  <section id="experiences" class="experiences" hidden>
 
     <div class="experiences-header">
 
-      <div style="font-size:32px">
-        🌿✨🦁
-      </div>
+      <div style="font-size:32px">🌿✨🦁</div>
 
       <p class="eyebrow">
         Prepare-se para viver e registrar
@@ -680,20 +768,18 @@ footer {
 
     </div>
 
-    <!-- GALERIA SEJA MEUS OLHOS -->
     <div class="experience-card">
 
       <div class="emoji">📸🌿</div>
 
-      <h3>
-        Seja Meus Olhos — Galeria do Ravi
-      </h3>
+      <h3>Seja Meus Olhos — Galeria do Ravi</h3>
 
       <p>
         Você também faz parte da nossa história!
         Registre momentos espontâneos da festa
         e compartilhe seus cliques na nossa
         galeria especial.
+
         Assim, o Ravi poderá descobrir essa
         aventura pelos olhos de quem esteve
         com ele. 💚
@@ -701,19 +787,17 @@ footer {
 
     </div>
 
-    <!-- CÂMERA EU FUI -->
     <div class="experience-card">
 
       <div class="emoji">🤳🦁</div>
 
-      <h3>
-        Eu Fui no Safári do Ravi!
-      </h3>
+      <h3>Eu Fui no Safári do Ravi!</h3>
 
       <p>
         Prepare o sorriso!
         Teremos uma câmera especial
         com uma moldura temática de lembrança.
+
         Tire suas fotos, entre no clima
         do safári e leve com você
         um registro divertido desse dia!
@@ -721,7 +805,6 @@ footer {
 
     </div>
 
-    <!-- PISCINA -->
     <div class="experience-card">
 
       <div class="emoji">🌊☀️</div>
@@ -739,12 +822,9 @@ footer {
 
     </div>
 
-    <!-- ALMOÇO ESPECIAL -->
     <div class="experience-finale">
 
-      <h3>
-        🍰 Hoje está liberado sair da dieta!
-      </h3>
+      <h3>🍰 Hoje está liberado sair da dieta!</h3>
 
       <p>
         Aproveite nosso almoço especial
@@ -755,6 +835,7 @@ footer {
       <p>
         Dê boas risadas, aproveite cada momento
         e divirta-se muito!
+
         Tudo foi preparado com
         <strong>muito amor</strong>
         para celebrar nosso pequeno príncipe.
@@ -763,18 +844,14 @@ footer {
       <p>
         Ah, e não esqueça de registrar
         muitos momentos —
-        <strong>
-          principalmente uma foto com o Ravi!
-        </strong>
+        <strong>principalmente uma foto com o Ravi!</strong>
         📷👑
       </p>
 
       <hr style="border:0;border-top:1px solid #bda16d;margin:22px 0">
 
       <p>
-        💚 <strong>
-          Lembre-se de confirmar sua presença!
-        </strong>
+        💚 <strong>Lembre-se de confirmar sua presença!</strong>
         Informe quantos adultos e crianças
         virão comemorar conosco.
       </p>
@@ -789,30 +866,23 @@ footer {
 
     <button
       type="button"
-      id="closeExperiences"
-      class="close-panel">
+      class="close-panel"
+      onclick="fecharPainel('experiences')">
       ↑ Voltar às opções do convite
     </button>
 
   </section>
 
-  <!-- EXPERIÊNCIA INTERATIVA DO CONVITE -->
-  <section
-    id="euVou"
-    class="eu-vou-section"
-    hidden>
+  <!-- EU VOU AO SAFÁRI -->
+  <section id="euVou" class="eu-vou-section" hidden>
 
-    <div style="font-size:42px">
-      🦁🌿📸
-    </div>
+    <div style="font-size:42px">🦁🌿📸</div>
 
     <p class="eyebrow">
       Uma aventura antes da festa
     </p>
 
-    <h2>
-      Eu Vou ao Safári do Ravi!
-    </h2>
+    <h2>Eu Vou ao Safári do Ravi!</h2>
 
     <p>
       A aventura já começou, e a sua presença
@@ -852,9 +922,7 @@ footer {
       href="https://bella-mavie.github.io/eu-vou-safari-ravi/"
       target="_blank"
       rel="noopener noreferrer">
-
       📸 Criar minha foto — Eu Vou!
-
     </a>
 
     <p style="font-size:12px;color:#e7d3ac">
@@ -864,8 +932,8 @@ footer {
 
     <button
       type="button"
-      id="closeEuVou"
-      class="close-panel">
+      class="close-panel"
+      onclick="fecharPainel('euVou')">
       ↑ Voltar às opções do convite
     </button>
 
@@ -873,175 +941,4 @@ footer {
 
   <!-- REVER VÍDEO -->
   <button
-    type="button"
-    id="replay"
-    class="secondary"
-    style="margin-top:20px">
-    ↺ Assistir à aventura novamente
-  </button>
-
-  <footer>
-    Feito com amor para o nosso príncipe Ravi Noah.
-    🦁👑💚
-  </footer>
-
-</main>
-</section>
-
-<script>
-const $ = id => document.getElementById(id);
-
-const cover = $("cover");
-const moviePage = $("moviePage");
-const details = $("details");
-const movie = $("movie");
-
-/* ABERTURA */
-$("start").addEventListener("click", () => {
-  cover.style.display = "none";
-  moviePage.style.display = "flex";
-
-  window.scrollTo(0,0);
-  movie.currentTime = 0;
-
-  const result = movie.play();
-
-  if (result && result.catch) {
-    result.catch(() => {
-      movie.controls = true;
-    });
-  }
-});
-
-/* MOSTRAR CONVITE */
-function showDetails() {
-  movie.pause();
-  cover.style.display = "none";
-  moviePage.style.display = "none";
-  details.style.display = "block";
-  window.scrollTo(0,0);
-}
-
-movie.addEventListener("ended", showDetails);
-$("skip").addEventListener("click", showDetails);
-
-/* PAINÉIS */
-const panels = [
-  "rsvp",
-  "gifts",
-  "experiences",
-  "euVou"
-];
-
-function togglePanel(id) {
-  const selected = $(id);
-  const opening = selected.hidden;
-
-  panels.forEach(panelId => {
-    $(panelId).hidden = true;
-  });
-
-  if (opening) {
-    selected.hidden = false;
-
-    selected.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
-  }
-}
-
-/* BOTÕES */
-$("rsvpBtn").onclick = () => togglePanel("rsvp");
-
-$("giftsBtn").onclick = () => togglePanel("gifts");
-
-$("experiencesBtn").onclick = () => {
-  togglePanel("experiences");
-};
-
-$("euVouBtn").onclick = () => {
-  togglePanel("euVou");
-};
-
-/* VOLTAR AOS BOTÕES */
-function returnToButtons(panelId) {
-  $(panelId).hidden = true;
-
-  document.querySelector(".buttons").scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
-}
-
-$("closeExperiences").onclick = () => {
-  returnToButtons("experiences");
-};
-
-$("closeEuVou").onclick = () => {
-  returnToButtons("euVou");
-};
-
-/* CONFIRMAÇÃO PELO WHATSAPP */
-$("sendRsvp").onclick = () => {
-  const name = $("guest").value.trim();
-
-  const adults = Math.max(
-    0,
-    parseInt($("adults").value,10) || 0
-  );
-
-  const kids = Math.max(
-    0,
-    parseInt($("kids").value,10) || 0
-  );
-
-  if (!name) {
-    alert("Por favor, informe seu nome.");
-    $("guest").focus();
-    return;
-  }
-
-  if (adults + kids === 0) {
-    alert("Informe quantas pessoas virão.");
-    return;
-  }
-
-  const message =
-    "🌿🦁 Olá! Quero confirmar nossa presença " +
-    "no aniversário de 1 aninho do Ravi Noah!\n\n" +
-    "👤 Responsável: " + name + "\n" +
-    "👨 Adultos: " + adults + "\n" +
-    "🧒 Crianças: " + kids + "\n\n" +
-    "🎉 Nos vemos nessa grande aventura!";
-
-  const url =
-    "https://wa.me/5511937449606?text=" +
-    encodeURIComponent(message);
-
-  window.open(url,"_blank","noopener");
-};
-
-/* COPIAR CHAVE PIX */
-$("copyPix").onclick = async () => {
-  const pix = "11943403741";
-
-  try {
-    await navigator.clipboard.writeText(pix);
-
-    $("copyState").textContent =
-      "Chave Pix copiada com sucesso! 💚";
-
-  } catch(error) {
-    $("copyState").textContent =
-      "Copie a chave acima: " + pix;
-  }
-};
-
-/* ASSISTIR NOVAMENTE */
-$("replay").onclick = () => {
-  details.style.display = "none";
-  moviePage.style.display = "flex";
-
-  window.scrollTo(0,0);
-        
+    typ
