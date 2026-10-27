@@ -475,6 +475,11 @@ footer {
 
 /* CONFIRMAÇÃO EXCLUSIVA DO SAFÁRI */
 .rsvp-intro{text-align:center}.rsvp-note{font-size:12px!important;color:#54684f}
+.rsvp-orientacao{background:#fff9e9;border:1px solid #d6bd83;border-radius:15px;padding:17px 16px;margin:17px 0 20px;font-family:Arial,sans-serif;color:#294231;box-shadow:0 4px 12px #3b49210c}
+.rsvp-orientacao h3{font-family:Georgia,serif;text-align:center;font-size:19px;color:#285b3e;margin:0 0 12px}
+.rsvp-orientacao p{font-size:14px;line-height:1.7;margin:10px 0}
+.rsvp-prazo{text-align:center;background:#e7efdd;border-radius:10px;padding:11px 9px;font-weight:bold;color:#214f35}
+.rsvp-orientacao .rsvp-privado{font-size:13px;color:#684c2c;border-top:1px solid #e3d3b1;padding-top:12px;margin-bottom:0}
 .rsvp-person{padding:14px;margin:12px 0;border:1px solid #cfbb94;border-radius:13px;background:#fffaf0}
 .rsvp-person h3{margin:0 0 9px;color:#315a3c;font-size:16px}
 .rsvp-person select{width:100%;margin-top:7px;padding:12px;border:1px solid #baa277;border-radius:9px;background:#fff;font-size:16px}
@@ -612,7 +617,19 @@ async function raviRpc(nome,corpo){
  return dados;
 }
 function raviLimparNovos(){document.getElementById('rsvpPeople').replaceChildren();raviParticipantes=0;}
+// O horário da festa é o de Brasília (UTC-3 em abril de 2027).
+const RAVI_ENCERRAMENTO = Date.parse('2027-04-16T09:00:00-03:00');
+function raviEncerrado(){return Date.now()>=RAVI_ENCERRAMENTO;}
+function raviAplicarEncerramento(){
+ const fechado=raviEncerrado();
+ const aviso=document.getElementById('raviEncerramentoAviso');
+ if(aviso)aviso.hidden=!fechado;
+ for(const el of document.querySelectorAll('#rsvp input,#rsvp select,#rsvp button'))el.disabled=fechado;
+ if(fechado)raviStatus('🔒 Prazo encerrado em 16/04/2027 às 9h. A lista foi fechada para a recepção. Para dúvidas, fale diretamente com a organização.');
+ return fechado;
+}
 function adicionarParticipante(){
+ if(raviAplicarEncerramento())return;
  if(raviParticipantes+raviExistentes.length>=30){raviStatus('O limite é de 30 participantes por convite.','error');return;}
  raviParticipantes++;
  const item=document.createElement('div');item.className='rsvp-person';
@@ -620,6 +637,7 @@ function adicionarParticipante(){
  document.getElementById('rsvpPeople').appendChild(item);
 }
 function removerParticipante(){
+ if(raviAplicarEncerramento())return;
  const lista=document.getElementById('rsvpPeople');if(lista.lastElementChild){lista.lastElementChild.remove();raviParticipantes--;}
 }
 function raviExibirExistentes(){
@@ -640,6 +658,7 @@ function raviExibirExistentes(){
  }
 }
 async function raviSolicitarRetorno(id,botao){
+ if(raviAplicarEncerramento())return;
  const codigo=raviCodigo();
  if(!codigo){raviStatus('Abra o convite exclusivo da família.','error');return;}
  if(!window.confirm('Deseja solicitar novamente a presença desta pessoa? A organização analisará o pedido.'))return;
@@ -661,9 +680,11 @@ async function raviCarregar(){
   if(!raviExistentes.length)adicionarParticipante();
   document.getElementById('raviEnviar').textContent=raviExistentes.length?'💚 Enviar alterações':'💚 Enviar solicitação de presença';
   raviStatus(raviExistentes.length?'Confira os nomes enviados. Você pode acrescentar pessoas ou solicitar retiradas.':'Preencha os nomes para participar da aventura.','success');
+  raviAplicarEncerramento();
  }catch(e){raviStatus(e.message||'Não foi possível consultar.','error');}
 }
 async function confirmarPresenca(){
+ if(raviAplicarEncerramento())return;
  const codigo=raviCodigo();const responsavel=document.getElementById('guest').value.trim();
  const novos=[...document.querySelectorAll('.rsvp-person')].map(item=>({nome:item.querySelector('.ravi-nome').value.trim(),categoria:item.querySelector('.ravi-categoria').value}));
  const retiradas=[...document.querySelectorAll('.ravi-retirar:checked')].map(x=>Number(x.value));
@@ -674,6 +695,7 @@ async function confirmarPresenca(){
  if(!raviExistentes.length&&!novos.length){raviStatus('Adicione pelo menos um participante.','error');return;}
  const botao=document.getElementById('raviEnviar');botao.disabled=true;raviStatus('Salvando com carinho…');
  try{
+  if(raviAplicarEncerramento())return;
   if(raviExistentes.length){await raviRpc('atualizar_confirmacao_ravi',{p_codigo:codigo,p_responsavel:responsavel,p_adicoes:novos,p_retiradas:retiradas});}
   else{await raviRpc('receber_confirmacao_ravi',{p_codigo:codigo,p_responsavel:responsavel,p_participantes:novos});}
   await raviCarregar();raviStatus('💚 Recebemos suas informações! As alterações serão analisadas pela organização.','success');
@@ -684,6 +706,8 @@ document.addEventListener('DOMContentLoaded',()=>{
  const codigo=raviCodigo();const notice=document.getElementById('raviLinkAviso');if(notice)notice.hidden=!!codigo;
  const send=document.getElementById('raviEnviar');if(send)send.disabled=!codigo;
  if(codigo)raviCarregar();else adicionarParticipante();
+ raviAplicarEncerramento();
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)raviAplicarEncerramento();});
 });
 
 /* COPIAR PIX */
@@ -917,7 +941,17 @@ function reverAventura() {
 
   <section id="rsvp" class="panel" hidden>
     <h2>🌿 Confirme sua aventura!</h2>
-    <p class="rsvp-intro">Veja os nomes já enviados, acrescente familiares ou solicite uma retirada. Basta usar o mesmo link exclusivo! 🦁💚</p>
+    <p class="rsvp-intro">Sua presença torna essa aventura ainda mais especial! 💚</p>
+    <div class="rsvp-orientacao">
+      <h3>🦁 Sua confirmação faz parte da nossa organização!</h3>
+      <p>Estamos preparando cada detalhe do primeiro aninho do Ravi Noah com muito carinho. Para que tudo aconteça da melhor forma, <strong>é muito importante confirmar a presença e informar o nome completo de cada pessoa da família que irá à festa, incluindo as crianças.</strong></p>
+      <p>Como teremos buffet e serviços contratados, precisamos organizar a quantidade de convidados e finalizar uma <strong>lista nominal para a recepção</strong>. No dia da festa, nossa recepcionista fará a conferência dos nomes na entrada, para receber todos com tranquilidade e atenção.</p>
+      <p class="rsvp-prazo">📅 Confirmações até sexta-feira, 16 de abril de 2027, às 9h (horário de Brasília).</p>
+      <p>A partir das 9h do dia 16/04, o formulário será encerrado e a lista será encaminhada à equipe de recepção. Se houver alguma mudança nos nomes informados, avise a organização o quanto antes.</p>
+      <p class="rsvp-privado">🔒 <strong>Convite exclusivo:</strong> este link foi preparado especialmente para a sua família. Por favor, não o encaminhe a outras pessoas. A inclusão de nomes e qualquer alteração de presença estão sujeitas à conferência da organização.</p>
+    </div>
+    <p class="rsvp-intro">Abaixo, confira os nomes já informados, acrescente participantes ou solicite alterações, se necessário. 🌿</p>
+    <p id="raviEncerramentoAviso" class="rsvp-prazo" hidden>🔒 Confirmações encerradas em 16/04/2027 às 9h (horário de Brasília). A lista está fechada para a recepção. Em caso de dúvidas, procure a organização.</p>
     <p id="raviLinkAviso" class="rsvp-note" hidden>Abra o link exclusivo que você recebeu da organização para confirmar presença.</p>
     <label class="field">Nome do responsável<input id="guest" type="text" maxlength="120" autocomplete="name" placeholder="Seu nome completo"></label>
     <h3 id="raviExistingTitle" class="ravi-subheading" hidden>🌿 Pessoas já informadas</h3><div id="raviExisting"></div><h3 class="ravi-subheading">✨ Acrescentar participantes</h3><div id="rsvpPeople"></div>
