@@ -472,6 +472,15 @@ footer {
   color:#d9d3b8;
   font-size:12px;
 }
+
+/* CONFIRMAÇÃO EXCLUSIVA DO SAFÁRI */
+.rsvp-intro{text-align:center}.rsvp-note{font-size:12px!important;color:#54684f}
+.rsvp-person{padding:14px;margin:12px 0;border:1px solid #cfbb94;border-radius:13px;background:#fffaf0}
+.rsvp-person h3{margin:0 0 9px;color:#315a3c;font-size:16px}
+.rsvp-person select{width:100%;margin-top:7px;padding:12px;border:1px solid #baa277;border-radius:9px;background:#fff;font-size:16px}
+.rsvp-actions{display:flex;gap:10px;margin:12px 0}.rsvp-actions button{flex:1;padding:12px;font-size:13px}
+#rsvpStatus{padding:10px 0;line-height:1.5;font-family:Arial,sans-serif;font-size:14px}
+#rsvpStatus[data-type="error"]{color:#a02c24}#rsvpStatus[data-type="success"]{color:#24643a}
 </style>
 
 <script>
@@ -582,45 +591,52 @@ function fecharPainel(id) {
   }
 }
 
-/* CONFIRMAR PRESENÇA PELO WHATSAPP */
-
-function confirmarPresenca() {
-  const nome = document.getElementById("guest").value.trim();
-
-  const adultos = Math.max(
-    0,
-    parseInt(document.getElementById("adults").value,10) || 0
-  );
-
-  const criancas = Math.max(
-    0,
-    parseInt(document.getElementById("kids").value,10) || 0
-  );
-
-  if (!nome) {
-    alert("Por favor, informe seu nome.");
-    document.getElementById("guest").focus();
-    return;
+/* CONFIRMAÇÃO PRIVADA NO SUPABASE — somente chave pública */
+const RAVI_SUPABASE_URL = "https://mynigxatpzownmjduowa.supabase.co";
+const RAVI_SUPABASE_PUBLIC_KEY = "sb_publishable_HrVQAx9MFId56dATTeIteQ_bTM9F4Lk";
+let raviParticipantes = 1;
+function raviStatus(mensagem,tipo="") {
+  const el=document.getElementById("rsvpStatus");
+  el.textContent=mensagem;el.dataset.type=tipo;
+}
+function adicionarParticipante() {
+  if(raviParticipantes>=20){raviStatus("Para grupos maiores, fale com a organização.","error");return;}
+  raviParticipantes++;
+  const lista=document.getElementById("rsvpPeople");
+  const item=document.createElement("div");item.className="rsvp-person";
+  item.innerHTML='<h3>Participante '+raviParticipantes+'</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="adolescente">Adolescente</option><option value="crianca">Criança</option><option value="bebe">Bebê</option></select></label>';
+  lista.appendChild(item);
+}
+function removerParticipante() {
+  if(raviParticipantes<=1)return;
+  document.getElementById("rsvpPeople").lastElementChild.remove();raviParticipantes--;
+}
+async function confirmarPresenca() {
+  const codigo=document.getElementById("raviCodigo").value.trim();
+  const responsavel=document.getElementById("guest").value.trim();
+  const nomes=[...document.querySelectorAll(".ravi-nome")];
+  const categorias=[...document.querySelectorAll(".ravi-categoria")];
+  const participantes=nomes.map((campo,i)=>({nome_completo:campo.value.trim(),categoria:categorias[i].value}));
+  if(!codigo||!responsavel||participantes.some(p=>!p.nome_completo)){
+    raviStatus("Preencha o código, o responsável e todos os nomes.","error");return;
   }
-
-  if (adultos + criancas === 0) {
-    alert("Informe quantas pessoas virão.");
-    return;
+  if(RAVI_SUPABASE_PUBLIC_KEY.startsWith("COLE_AQUI")){
+    raviStatus("A confirmação está em preparação. Ainda falta configurar a chave pública do sistema.","error");return;
   }
-
-  const mensagem =
-    "🌿🦁 Olá! Quero confirmar nossa presença " +
-    "no aniversário de 1 aninho do Ravi Noah!\n\n" +
-    "👤 Responsável: " + nome + "\n" +
-    "👨 Adultos: " + adultos + "\n" +
-    "🧒 Crianças: " + criancas + "\n\n" +
-    "🎉 Nos vemos nessa grande aventura!";
-
-  const endereco =
-    "https://wa.me/5511937449606?text=" +
-    encodeURIComponent(mensagem);
-
-  window.location.href = endereco;
+  const botao=document.getElementById("raviEnviar");botao.disabled=true;
+  raviStatus("Enviando sua confirmação com carinho…");
+  try{
+    const resposta=await fetch(RAVI_SUPABASE_URL+"/rest/v1/rpc/receber_confirmacao_ravi",{
+      method:"POST",headers:{"Content-Type":"application/json","apikey":RAVI_SUPABASE_PUBLIC_KEY},
+      body:JSON.stringify({p_codigo:codigo,p_responsavel:responsavel,p_participantes:participantes})
+    });
+    const dados=await resposta.json().catch(()=>null);
+    if(!resposta.ok){throw new Error("Não foi possível registrar a solicitação. Confira o código e tente novamente.");}
+    if(dados&&typeof dados==="object"&&dados.sucesso===false){throw new Error("Não foi possível registrar a solicitação. Confira os dados e tente novamente.");}
+    raviStatus("💚 Recebemos sua solicitação! A organização fará a conferência. Obrigado por participar desta aventura!","success");
+    botao.hidden=true;
+  }catch(e){raviStatus(e.message||"Não foi possível enviar. Tente novamente.","error");}
+  finally{botao.disabled=false;}
 }
 
 /* COPIAR PIX */
@@ -853,68 +869,15 @@ function reverAventura() {
   <!-- CONFIRMAR PRESENÇA -->
 
   <section id="rsvp" class="panel" hidden>
-
-    <h2>Confirme sua presença 💚</h2>
-
-    <p>
-      Para preparar tudo com muito carinho,
-      precisamos saber quantas pessoas
-      virão comemorar conosco!
-    </p>
-
-    <label class="field">
-
-      Seu nome
-
-      <input
-        id="guest"
-        type="text"
-        autocomplete="name"
-        placeholder="Nome do responsável">
-
-    </label>
-
-    <div class="fieldrow">
-
-      <label class="field">
-
-        Adultos
-
-        <input
-          id="adults"
-          type="number"
-          min="0"
-          max="100"
-          value="1">
-
-      </label>
-
-      <label class="field">
-
-        Crianças
-
-        <input
-          id="kids"
-          type="number"
-          min="0"
-          max="100"
-          value="0">
-
-      </label>
-
-    </div>
-
-    <button
-      type="button"
-      onclick="confirmarPresenca()">
-      Enviar confirmação pelo WhatsApp ↗
-    </button>
-
-    <p style="font-size:12px">
-      O WhatsApp abrirá com sua mensagem pronta.
-      Basta enviá-la para confirmar.
-    </p>
-
+    <h2>🌿 Confirme sua aventura!</h2>
+    <p class="rsvp-intro">Cada família recebeu um código especial. Informe o seu e os nomes de quem deseja celebrar o primeiro aninho do Ravi Noah conosco. 🦁💚</p>
+    <label class="field">Código exclusivo da família<input id="raviCodigo" type="text" maxlength="100" autocomplete="off" placeholder="Código recebido no convite"></label>
+    <label class="field">Nome do responsável<input id="guest" type="text" maxlength="120" autocomplete="name" placeholder="Seu nome completo"></label>
+    <div id="rsvpPeople"><div class="rsvp-person"><h3>Participante 1</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="adolescente">Adolescente</option><option value="crianca">Criança</option><option value="bebe">Bebê</option></select></label></div></div>
+    <div class="rsvp-actions"><button type="button" onclick="adicionarParticipante()">＋ Participante</button><button type="button" onclick="removerParticipante()">− Remover</button></div>
+    <button id="raviEnviar" type="button" onclick="confirmarPresenca()">💚 Enviar solicitação de presença</button>
+    <p id="rsvpStatus" role="status" aria-live="polite"></p>
+    <p class="rsvp-note">A solicitação será conferida pela organização. O envio não representa confirmação automática. Seus dados não ficam visíveis aos demais convidados.</p>
   </section>
 
   <!-- SUGESTÕES DE PRESENTES -->
