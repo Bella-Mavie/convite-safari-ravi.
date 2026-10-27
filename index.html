@@ -604,7 +604,7 @@ function adicionarParticipante() {
   raviParticipantes++;
   const lista=document.getElementById("rsvpPeople");
   const item=document.createElement("div");item.className="rsvp-person";
-  item.innerHTML='<h3>Participante '+raviParticipantes+'</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="adolescente">Adolescente</option><option value="crianca">Criança</option><option value="bebe">Bebê</option></select></label>';
+  item.innerHTML='<h3>Participante '+raviParticipantes+'</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="crianca">Criança</option></select></label>';
   lista.appendChild(item);
 }
 function removerParticipante() {
@@ -616,9 +616,9 @@ async function confirmarPresenca() {
   const responsavel=document.getElementById("guest").value.trim();
   const nomes=[...document.querySelectorAll(".ravi-nome")];
   const categorias=[...document.querySelectorAll(".ravi-categoria")];
-  const participantes=nomes.map((campo,i)=>({nome_completo:campo.value.trim(),categoria:categorias[i].value}));
+  const participantes=nomes.map((campo,i)=>({nome:campo.value.trim(),categoria:categorias[i].value}));
   if(!codigo){raviStatus("Abra o link exclusivo enviado pela organização para confirmar presença.","error");return;}
-  if(!responsavel||participantes.some(p=>!p.nome_completo)){
+  if(!responsavel||participantes.some(p=>!p.nome)){
     raviStatus("Preencha o responsável e todos os nomes.","error");return;
   }
   if(RAVI_SUPABASE_PUBLIC_KEY.startsWith("COLE_AQUI")){
@@ -889,7 +889,7 @@ function reverAventura() {
     <p class="rsvp-intro">Escreva os nomes de quem vai celebrar o primeiro aninho do Ravi Noah conosco. Não é necessário digitar nenhum código! 🦁💚</p>
     <p id="raviLinkAviso" class="rsvp-note" hidden>Abra o link exclusivo que você recebeu da organização para confirmar presença.</p>
     <label class="field">Nome do responsável<input id="guest" type="text" maxlength="120" autocomplete="name" placeholder="Seu nome completo"></label>
-    <div id="rsvpPeople"><div class="rsvp-person"><h3>Participante 1</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="adolescente">Adolescente</option><option value="crianca">Criança</option><option value="bebe">Bebê</option></select></label></div></div>
+    <div id="rsvpPeople"><div class="rsvp-person"><h3>Participante 1</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="crianca">Criança</option></select></label></div></div>
     <div class="rsvp-actions"><button type="button" onclick="adicionarParticipante()">＋ Participante</button><button type="button" onclick="removerParticipante()">− Remover</button></div>
     <button id="raviEnviar" type="button" onclick="confirmarPresenca()">💚 Enviar solicitação de presença</button>
     <p id="rsvpStatus" role="status" aria-live="polite"></p>
