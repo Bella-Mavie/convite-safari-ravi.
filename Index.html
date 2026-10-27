@@ -1,0 +1,1172 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102d21">
+<meta name="description" content="O Safári do Ravi Noah — 1 Aninho! Domingo, 18 de abril de 2027.">
+<title>O Safári do Ravi Noah | 1 Aninho</title>
+
+<style>
+:root {
+  --verde:#102d21;
+  --verde2:#1d4833;
+  --dourado:#e9c37d;
+  --creme:#f8ebcf;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
+body {
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  background:var(--verde);
+  color:var(--creme);
+}
+
+body.video-aberto {
+  overflow:hidden;
+}
+
+[hidden] {
+  display:none!important;
+}
+
+button,a {
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+button {
+  cursor:pointer;
+  font:inherit;
+}
+
+a {
+  text-decoration:none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline:3px solid white;
+  outline-offset:3px;
+}
+
+/* CAPA DO CONVITE */
+
+#cover {
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  padding:30px 20px 9vh;
+  text-align:center;
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 35%,
+      rgba(5,24,12,.95)
+    ),
+    url("portao.jpg") center/cover no-repeat;
+}
+
+.cover-content {
+  width:100%;
+  max-width:420px;
+}
+
+.cover-content p {
+  color:#ffe5af;
+  font-size:13px;
+  letter-spacing:2px;
+  text-shadow:0 2px 5px #000;
+}
+
+.primary {
+  display:block;
+  width:100%;
+  border:1px solid #ffe4a0;
+  border-radius:40px;
+  padding:18px 20px;
+  color:#2c281a;
+  background:linear-gradient(135deg,#ffe5ab,#c79d57);
+  font-weight:bold;
+  font-size:16px;
+  box-shadow:0 8px 25px #0008;
+}
+
+/* VÍDEO EM TELA CHEIA */
+
+#moviePage {
+  display:none;
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  padding:0;
+  margin:0;
+  background:#000;
+  z-index:9999;
+  overflow:hidden;
+  align-items:center;
+  justify-content:center;
+}
+
+#movie {
+  display:block;
+  width:100%;
+  height:100%;
+  max-height:none;
+  object-fit:cover;
+  background:#000;
+}
+
+#skip {
+  position:absolute;
+  bottom:calc(25px + env(safe-area-inset-bottom));
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  width:max-content;
+  max-width:90%;
+  background:rgba(10,35,23,.82);
+  color:#ffe2a5;
+  border:1px solid var(--dourado);
+  padding:12px 20px;
+  border-radius:30px;
+  font-size:14px;
+  white-space:nowrap;
+  box-shadow:0 5px 20px #0008;
+}
+
+/* CONVITE PRINCIPAL */
+
+#details {
+  display:none;
+  min-height:100vh;
+  padding:40px 17px 60px;
+  background:
+    radial-gradient(
+      ellipse at top,
+      #2c6242 0%,
+      #102d21 65%
+    );
+}
+
+main {
+  max-width:500px;
+  margin:auto;
+  text-align:center;
+}
+
+.crown {
+  font-size:38px;
+}
+
+.eyebrow {
+  font-family:Arial,sans-serif;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#e4cb96;
+}
+
+h1 {
+  color:var(--dourado);
+  font-size:clamp(32px,9vw,44px);
+  line-height:1.15;
+  margin:12px 0;
+}
+
+h2 {
+  color:var(--dourado);
+}
+
+.subtitle {
+  font-size:21px;
+  color:#f4d599;
+}
+
+.event {
+  margin:26px 0;
+  padding:23px 12px;
+  border-top:1px solid #bca26e;
+  border-bottom:1px solid #bca26e;
+  line-height:1.8;
+  font-size:16px;
+}
+
+.event strong {
+  color:#ffe2a5;
+}
+
+.event .venue {
+  color:var(--dourado);
+  font-weight:bold;
+}
+
+/* FOTO E BOAS-VINDAS */
+
+.welcome {
+  margin:24px 0 28px;
+  background:linear-gradient(155deg,#27583d,#143728);
+  border:1px solid #c9a866;
+  border-radius:23px;
+  overflow:hidden;
+  box-shadow:0 12px 32px #0005;
+}
+
+.photo-frame {
+  padding:11px;
+  background:linear-gradient(
+    135deg,
+    #f0d49b,
+    #a47c3d,
+    #f6dda6
+  );
+}
+
+.photo-frame img {
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:13px;
+}
+
+.welcome-text {
+  padding:24px 21px 28px;
+}
+
+.welcome-text h2 {
+  font-size:27px;
+  line-height:1.25;
+  margin:0 0 18px;
+}
+
+.welcome-text p {
+  font-family:Arial,sans-serif;
+  font-size:15px;
+  line-height:1.8;
+  margin:13px 0;
+}
+
+.signature {
+  color:#f5d391;
+  font-style:italic;
+  font-size:18px;
+  margin-top:18px;
+}
+
+/* BOTÕES PRINCIPAIS */
+
+.buttons {
+  display:grid;
+  gap:12px;
+  margin:25px 0;
+}
+
+.buttons button,
+.buttons a {
+  display:block;
+  width:100%;
+  padding:16px 13px;
+  border:1px solid #d9bc81;
+  border-radius:13px;
+  background:#ead3a6;
+  color:#263e2e;
+  font-family:Arial,sans-serif;
+  font-size:16px;
+  font-weight:bold;
+  text-align:center;
+}
+
+.buttons .eu-vou-nav {
+  background:linear-gradient(135deg,#ffe6ad,#c79c54);
+  border:2px solid #ffe5a7;
+  box-shadow:0 7px 20px #0005;
+  padding:18px 12px;
+}
+
+.eu-vou-nav small {
+  display:block;
+  margin-top:7px;
+  color:#37523e;
+  font-size:12px;
+  font-weight:normal;
+  line-height:1.5;
+}
+
+/* PAINÉIS */
+
+.panel {
+  margin:20px 0;
+  padding:22px 18px;
+  border-radius:19px;
+  background:#f5e7ca;
+  color:#273e2d;
+  text-align:left;
+}
+
+.panel h2 {
+  color:#385c40;
+  text-align:center;
+  margin-top:0;
+}
+
+.panel p {
+  font-family:Arial,sans-serif;
+  line-height:1.65;
+  font-size:15px;
+}
+
+.field {
+  display:block;
+  margin:14px 0;
+  font-family:Arial,sans-serif;
+  font-size:14px;
+}
+
+.field input {
+  display:block;
+  width:100%;
+  margin-top:7px;
+  padding:13px;
+  border:1px solid #baa277;
+  border-radius:9px;
+  background:#fff;
+  font-size:16px;
+}
+
+.fieldrow {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.panel button {
+  display:block;
+  width:100%;
+  border:0;
+  border-radius:10px;
+  background:#285c3f;
+  color:white;
+  padding:14px;
+  font-family:Arial,sans-serif;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.pix {
+  text-align:center;
+  font-family:Arial,sans-serif;
+  font-weight:bold;
+  font-size:21px;
+  margin:16px 0;
+}
+
+/* EXPERIÊNCIAS DA FESTA */
+
+.experiences {
+  margin:23px 0;
+}
+
+.experiences-header {
+  padding:15px 8px;
+}
+
+.experiences-header h2 {
+  font-size:29px;
+  margin:10px 0;
+}
+
+.experiences-header p {
+  font-family:Arial,sans-serif;
+  font-size:15px;
+  line-height:1.7;
+}
+
+.experience-card {
+  margin:14px 0;
+  padding:22px 19px;
+  border:1px solid #bfa26a;
+  border-radius:19px;
+  background:linear-gradient(155deg,#28573f,#153c2e);
+  text-align:left;
+  box-shadow:0 7px 22px #0004;
+}
+
+.experience-card .emoji {
+  font-size:28px;
+}
+
+.experience-card h3 {
+  font-size:21px;
+  color:#f5d393;
+  margin:10px 0;
+}
+
+.experience-card p {
+  font-family:Arial,sans-serif;
+  font-size:15px;
+  line-height:1.75;
+  margin:0;
+}
+
+.experience-card p + p {
+  margin-top:12px;
+}
+
+.experience-finale {
+  border:1px solid #bfa26a;
+  border-radius:20px;
+  padding:24px 19px;
+  margin:15px 0;
+  background:linear-gradient(155deg,#25543b,#123427);
+}
+
+.experience-finale h3 {
+  color:#f7d99b;
+  font-size:23px;
+}
+
+.experience-finale p {
+  font-family:Arial,sans-serif;
+  line-height:1.75;
+  font-size:15px;
+}
+
+.close-panel {
+  display:block;
+  width:100%;
+  margin:17px auto;
+  padding:13px 20px;
+  background:transparent;
+  border:1px solid #d3b67b;
+  border-radius:30px;
+  color:#f6dda8;
+  font-family:Arial,sans-serif;
+  font-size:14px;
+}
+
+.secondary {
+  background:transparent;
+  border:1px solid var(--dourado);
+  color:var(--dourado);
+  border-radius:30px;
+  padding:13px 18px;
+  font-size:14px;
+}
+
+footer {
+  margin-top:35px;
+  color:#d9d3b8;
+  font-size:12px;
+}
+
+/* CONFIRMAÇÃO EXCLUSIVA DO SAFÁRI */
+.rsvp-intro{text-align:center}.rsvp-note{font-size:12px!important;color:#54684f}
+.rsvp-person{padding:14px;margin:12px 0;border:1px solid #cfbb94;border-radius:13px;background:#fffaf0}
+.rsvp-person h3{margin:0 0 9px;color:#315a3c;font-size:16px}
+.rsvp-person select{width:100%;margin-top:7px;padding:12px;border:1px solid #baa277;border-radius:9px;background:#fff;font-size:16px}
+.rsvp-actions{display:flex;gap:10px;margin:12px 0}.rsvp-actions button{flex:1;padding:12px;font-size:13px}
+#rsvpStatus{padding:10px 0;line-height:1.5;font-family:Arial,sans-serif;font-size:14px}
+#rsvpStatus[data-type="error"]{color:#a02c24}#rsvpStatus[data-type="success"]{color:#24643a}
+
+.ravi-existing{background:#edf4e9;border:1px solid #b4c7a6;border-radius:12px;padding:12px;margin:10px 0;font-family:Arial,sans-serif}
+.ravi-existing strong{display:block;color:#244f32}.ravi-existing small{display:block;margin:5px 0;color:#48624c}
+.ravi-existing label{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:8px;color:#804629}
+.ravi-existing input{width:18px;height:18px}.ravi-subheading{font-size:16px;color:#315a3c;margin-top:20px}
+</style>
+
+<script>
+/* EXIBIR INFORMAÇÕES DA FESTA */
+
+function mostrarConvite() {
+  const capa = document.getElementById("cover");
+  const paginaVideo = document.getElementById("moviePage");
+  const convite = document.getElementById("details");
+  const video = document.getElementById("movie");
+
+  if (video) {
+    try {
+      video.pause();
+    } catch (erro) {}
+  }
+
+  if (capa) capa.style.display = "none";
+  if (paginaVideo) paginaVideo.style.display = "none";
+  if (convite) convite.style.display = "block";
+
+  document.body.classList.remove("video-aberto");
+  window.scrollTo(0,0);
+}
+
+/* INICIAR A AVENTURA */
+
+function abrirAventura() {
+  const capa = document.getElementById("cover");
+  const paginaVideo = document.getElementById("moviePage");
+  const convite = document.getElementById("details");
+  const video = document.getElementById("movie");
+
+  if (!paginaVideo || !video) {
+    mostrarConvite();
+    return;
+  }
+
+  if (capa) capa.style.display = "none";
+  if (convite) convite.style.display = "none";
+
+  paginaVideo.style.display = "flex";
+  document.body.classList.add("video-aberto");
+  window.scrollTo(0,0);
+
+  try {
+    video.pause();
+    video.currentTime = 0;
+    video.controls = false;
+    video.muted = false;
+
+    const tentativa = video.play();
+
+    if (tentativa && typeof tentativa.catch === "function") {
+      tentativa.catch(function(erro) {
+        console.warn("Reprodução não iniciada:",erro);
+        video.controls = true;
+      });
+    }
+
+  } catch (erro) {
+    console.warn("Erro ao abrir vídeo:",erro);
+    mostrarConvite();
+  }
+}
+
+/* ABRIR PAINÉIS DO CONVITE */
+
+function abrirPainel(id) {
+  const nomes = ["rsvp","gifts","experiences"];
+  const escolhido = document.getElementById(id);
+
+  if (!escolhido) return;
+
+  const abrir = escolhido.hidden;
+
+  nomes.forEach(function(nome) {
+    const painel = document.getElementById(nome);
+    if (painel) painel.hidden = true;
+  });
+
+  if (abrir) {
+    escolhido.hidden = false;
+
+    requestAnimationFrame(function() {
+      escolhido.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    });
+  }
+}
+
+/* FECHAR PAINÉIS */
+
+function fecharPainel(id) {
+  const painel = document.getElementById(id);
+
+  if (painel) painel.hidden = true;
+
+  const botoes = document.querySelector(".buttons");
+
+  if (botoes) {
+    botoes.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+}
+
+/* CONFIRMAÇÃO PRIVADA NO SUPABASE — somente chave pública */
+const RAVI_SUPABASE_URL = "https://mynigxatpzownmjduowa.supabase.co";
+const RAVI_SUPABASE_PUBLIC_KEY = "sb_publishable_HrVQAx9MFId56dATTeIteQ_bTM9F4Lk";
+let raviParticipantes=0;
+let raviExistentes=[];
+let raviCarregado=false;
+function raviCodigo(){return new URLSearchParams(window.location.search).get('convite')?.trim()||'';}
+function raviStatus(mensagem,tipo=''){const el=document.getElementById('rsvpStatus');if(el){el.textContent=mensagem;el.dataset.type=tipo;}}
+async function raviRpc(nome,corpo){
+ const resposta=await fetch(RAVI_SUPABASE_URL+'/rest/v1/rpc/'+nome,{
+ method:'POST',headers:{'Content-Type':'application/json','apikey':RAVI_SUPABASE_PUBLIC_KEY},body:JSON.stringify(corpo)});
+ const dados=await resposta.json().catch(()=>null);
+ if(!resposta.ok||dados?.sucesso===false)throw new Error(dados?.message||dados?.mensagem||'Não foi possível consultar o convite.');
+ return dados;
+}
+function raviLimparNovos(){document.getElementById('rsvpPeople').replaceChildren();raviParticipantes=0;}
+function adicionarParticipante(){
+ if(raviParticipantes+raviExistentes.length>=30){raviStatus('O limite é de 30 participantes por convite.','error');return;}
+ raviParticipantes++;
+ const item=document.createElement('div');item.className='rsvp-person';
+ item.innerHTML='<h3>Novo participante</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="crianca">Criança</option></select></label>';
+ document.getElementById('rsvpPeople').appendChild(item);
+}
+function removerParticipante(){
+ const lista=document.getElementById('rsvpPeople');if(lista.lastElementChild){lista.lastElementChild.remove();raviParticipantes--;}
+}
+function raviExibirExistentes(){
+ const area=document.getElementById('raviExisting');area.replaceChildren();
+ const titulo=document.getElementById('raviExistingTitle');titulo.hidden=!raviExistentes.length;
+ for(const p of raviExistentes){
+  const bloco=document.createElement('div');bloco.className='ravi-existing';
+  const nome=document.createElement('strong');nome.textContent=p.nome;bloco.appendChild(nome);
+  const detalhe=document.createElement('small');detalhe.textContent=(p.categoria==='crianca'?'Criança':'Adulto')+' · Nome já enviado';bloco.appendChild(detalhe);
+  if(!p.retirada_solicitada){
+   const rotulo=document.createElement('label');const caixa=document.createElement('input');caixa.type='checkbox';caixa.className='ravi-retirar';caixa.value=String(p.id);
+   rotulo.append(caixa,document.createTextNode('Solicitar retirada desta pessoa'));bloco.appendChild(rotulo);
+  }else{
+   const aviso=document.createElement('small');aviso.textContent='Retirada solicitada — aguardando a organização';bloco.appendChild(aviso);
+    const voltar=document.createElement('button');voltar.type='button';voltar.textContent='💚 Solicitar presença novamente';voltar.style.marginTop='10px';voltar.addEventListener('click',()=>raviSolicitarRetorno(p.id,voltar));bloco.appendChild(voltar);
+  }
+  area.appendChild(bloco);
+ }
+}
+async function raviSolicitarRetorno(id,botao){
+ const codigo=raviCodigo();
+ if(!codigo){raviStatus('Abra o convite exclusivo da família.','error');return;}
+ if(!window.confirm('Deseja solicitar novamente a presença desta pessoa? A organização analisará o pedido.'))return;
+ botao.disabled=true;raviStatus('Enviando solicitação de retorno…');
+ try{
+  await raviRpc('solicitar_retorno_ravi',{p_codigo:codigo,p_participante_id:id});
+  await raviCarregar();raviStatus('💚 Pedido de retorno enviado! A organização irá analisar.','success');
+ }catch(e){raviStatus(e.message||'Não foi possível solicitar o retorno.','error');botao.disabled=false;}
+}
+async function raviCarregar(){
+ const codigo=raviCodigo();if(!codigo)return;
+ raviStatus('Consultando os nomes já informados…');
+ try{
+  const dados=await raviRpc('consultar_confirmacao_ravi',{p_codigo:codigo});
+  raviExistentes=Array.isArray(dados.participantes)?dados.participantes:[];
+  raviCarregado=true;
+  if(dados.responsavel)document.getElementById('guest').value=dados.responsavel;
+  raviExibirExistentes();raviLimparNovos();
+  if(!raviExistentes.length)adicionarParticipante();
+  document.getElementById('raviEnviar').textContent=raviExistentes.length?'💚 Enviar alterações':'💚 Enviar solicitação de presença';
+  raviStatus(raviExistentes.length?'Confira os nomes enviados. Você pode acrescentar pessoas ou solicitar retiradas.':'Preencha os nomes para participar da aventura.','success');
+ }catch(e){raviStatus(e.message||'Não foi possível consultar.','error');}
+}
+async function confirmarPresenca(){
+ const codigo=raviCodigo();const responsavel=document.getElementById('guest').value.trim();
+ const novos=[...document.querySelectorAll('.rsvp-person')].map(item=>({nome:item.querySelector('.ravi-nome').value.trim(),categoria:item.querySelector('.ravi-categoria').value}));
+ const retiradas=[...document.querySelectorAll('.ravi-retirar:checked')].map(x=>Number(x.value));
+ if(!codigo){raviStatus('Abra o link exclusivo enviado pela organização.','error');return;}
+ if(responsavel.length<3){raviStatus('Informe o nome completo do responsável.','error');return;}
+ if(novos.some(p=>!p.nome||p.nome.split(/\s+/).length<2)){raviStatus('Preencha nome e sobrenome de cada novo participante, ou remova a linha vazia.','error');return;}
+ if(raviExistentes.length&&novos.length===0&&retiradas.length===0){raviStatus('Nenhuma alteração selecionada.','error');return;}
+ if(!raviExistentes.length&&!novos.length){raviStatus('Adicione pelo menos um participante.','error');return;}
+ const botao=document.getElementById('raviEnviar');botao.disabled=true;raviStatus('Salvando com carinho…');
+ try{
+  if(raviExistentes.length){await raviRpc('atualizar_confirmacao_ravi',{p_codigo:codigo,p_responsavel:responsavel,p_adicoes:novos,p_retiradas:retiradas});}
+  else{await raviRpc('receber_confirmacao_ravi',{p_codigo:codigo,p_responsavel:responsavel,p_participantes:novos});}
+  await raviCarregar();raviStatus('💚 Recebemos suas informações! As alterações serão analisadas pela organização.','success');
+ }catch(e){raviStatus(e.message||'Não foi possível enviar. Tente novamente.','error');}
+ finally{botao.disabled=false;}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ const codigo=raviCodigo();const notice=document.getElementById('raviLinkAviso');if(notice)notice.hidden=!!codigo;
+ const send=document.getElementById('raviEnviar');if(send)send.disabled=!codigo;
+ if(codigo)raviCarregar();else adicionarParticipante();
+});
+
+/* COPIAR PIX */
+
+function copiarPix() {
+  const chave = "11943403741";
+  const aviso = document.getElementById("copyState");
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(chave)
+      .then(function() {
+        aviso.textContent = "Chave Pix copiada! 💚";
+      })
+      .catch(function() {
+        aviso.textContent = "Copie a chave acima: " + chave;
+      });
+  } else {
+    aviso.textContent = "Copie a chave acima: " + chave;
+  }
+}
+
+/* REVER A AVENTURA */
+
+function reverAventura() {
+  abrirAventura();
+}
+</script>
+</head>
+
+<body>
+
+<!-- CAPA DO SAFÁRI -->
+
+<section id="cover">
+
+  <div class="cover-content">
+
+    <p>
+      UMA AVENTURA MUITO ESPECIAL ESPERA POR VOCÊ
+    </p>
+
+    <button
+      type="button"
+      id="start"
+      class="primary"
+      onclick="abrirAventura()">
+      🐾 Toque para começar a aventura
+    </button>
+
+    <p style="font-size:12px;letter-spacing:0">
+      🔊 Ative o som para ouvir a história
+    </p>
+
+  </div>
+
+</section>
+
+<!-- VÍDEO DE ABERTURA -->
+
+<section id="moviePage">
+
+  <video
+    id="movie"
+    playsinline
+    webkit-playsinline
+    preload="auto"
+    poster="portao.jpg"
+    onended="mostrarConvite()"
+    onerror="mostrarConvite()">
+
+    <source
+      src="aventura-ravi.mp4"
+      type="video/mp4">
+
+    Seu navegador não suporta este vídeo.
+
+  </video>
+
+  <button
+    type="button"
+    id="skip"
+    onclick="mostrarConvite()">
+    Ver informações da festa →
+  </button>
+
+</section>
+
+<!-- CONVITE PRINCIPAL -->
+
+<section id="details">
+
+<main>
+
+  <div class="crown">🦁🌿👑</div>
+
+  <p class="eyebrow">
+    Uma grande aventura espera por você
+  </p>
+
+  <h1>
+    O Safári do<br>
+    Ravi Noah
+  </h1>
+
+  <div class="subtitle">
+    ✦ 1 Aninho ✦
+  </div>
+
+  <!-- DATA E LOCAL -->
+
+  <div class="event">
+
+    <strong>
+      Domingo, 18 de abril de 2027
+    </strong><br>
+
+    <strong>
+      A partir das 12h
+    </strong><br>
+
+    <span class="venue">
+      Espaço Recanto do Vale
+    </span><br>
+
+    Avenida Ouro Preto, 1660<br>
+
+    Jardim Alegria — Francisco Morato/SP
+
+  </div>
+
+  <!-- FOTO DO RAVI -->
+
+  <section class="welcome">
+
+    <div class="photo-frame">
+
+      <img
+        src="ravi-safari.png"
+        alt="Ravi Noah com seus amiguinhos do safári">
+
+    </div>
+
+    <div class="welcome-text">
+
+      <h2>
+        Oi! Que bom ver você por aqui! 💚
+      </h2>
+
+      <p>
+        Estou muito feliz em convidar você
+        e sua família para comemorar comigo
+        o meu <strong>primeiro aninho!</strong>
+        🦁🎂
+      </p>
+
+      <p>
+        Preparei uma aventura cheia de carinho,
+        alegria e momentos especiais
+        para vivermos juntos.
+      </p>
+
+      <p>
+        Logo abaixo, você encontrará todas
+        as informações da minha festa.
+        Não deixe de conhecer as experiências
+        que preparamos para esse dia!
+      </p>
+
+      <h2 style="font-size:23px;margin-top:20px">
+        Espero por vocês no meu safári! 🌿
+      </h2>
+
+      <div class="signature">
+        Com carinho,<br>
+        Ravi Noah. 👑
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CINCO BOTÕES PRINCIPAIS -->
+
+  <div class="buttons">
+
+    <button
+      type="button"
+      onclick="abrirPainel('rsvp')">
+      💚 Confirmar presença
+    </button>
+
+    <a
+      href="https://www.google.com/maps/search/?api=1&amp;query=Avenida%20Ouro%20Preto%201660%20Jardim%20Alegria%20Francisco%20Morato%20SP"
+      target="_blank"
+      rel="noopener noreferrer">
+      📍 Como chegar
+    </a>
+
+    <button
+      type="button"
+      onclick="abrirPainel('gifts')">
+      🎁 Sugestões de presentes
+    </button>
+
+    <button
+      type="button"
+      onclick="abrirPainel('experiences')">
+      ✨ Experiências da Festa
+    </button>
+
+    <!-- LINK DIRETO PARA A CÂMERA -->
+
+    <a
+      class="eu-vou-nav"
+      href="https://bella-mavie.github.io/eu-vou-safari-ravi/"
+      target="_blank"
+      rel="noopener noreferrer">
+
+      📸 Eu Vou ao Safári — Clique aqui!
+
+      <small>
+        Crie sua foto personalizada
+        com a moldura do convite
+      </small>
+
+    </a>
+
+  </div>
+
+  <!-- CONFIRMAR PRESENÇA -->
+
+  <section id="rsvp" class="panel" hidden>
+    <h2>🌿 Confirme sua aventura!</h2>
+    <p class="rsvp-intro">Veja os nomes já enviados, acrescente familiares ou solicite uma retirada. Basta usar o mesmo link exclusivo! 🦁💚</p>
+    <p id="raviLinkAviso" class="rsvp-note" hidden>Abra o link exclusivo que você recebeu da organização para confirmar presença.</p>
+    <label class="field">Nome do responsável<input id="guest" type="text" maxlength="120" autocomplete="name" placeholder="Seu nome completo"></label>
+    <h3 id="raviExistingTitle" class="ravi-subheading" hidden>🌿 Pessoas já informadas</h3><div id="raviExisting"></div><h3 class="ravi-subheading">✨ Acrescentar participantes</h3><div id="rsvpPeople"></div>
+    <div class="rsvp-actions"><button type="button" onclick="adicionarParticipante()">＋ Participante</button><button type="button" onclick="removerParticipante()">− Remover</button></div>
+    <button id="raviEnviar" type="button" onclick="confirmarPresenca()">💚 Enviar solicitação de presença</button>
+    <p id="rsvpStatus" role="status" aria-live="polite"></p>
+    <p class="rsvp-note">As alterações serão conferidas pela organização. Solicitar uma retirada não cancela automaticamente uma autorização. Quem tiver acesso ao link exclusivo poderá ver os nomes já informados; não compartilhe o link fora da família.</p>
+  </section>
+
+  <!-- SUGESTÕES DE PRESENTES -->
+
+  <section id="gifts" class="panel" hidden>
+
+    <h2>Presentinhos para o Ravi 🎁</h2>
+
+    <p>
+      Sua presença é nosso maior presente!
+      Mas, se desejar mimar
+      <strong>nosso pequeno príncipe</strong>:
+    </p>
+
+    <p>
+      👕 <strong>Roupas:</strong> tamanho 2<br>
+      👟 <strong>Sapatos:</strong> 19/20<br>
+      🧸 <strong>Brinquedos:</strong>
+      a partir de 1 ano
+    </p>
+
+    <hr>
+
+    <p style="text-align:center">
+      💚 Presentinho via Pix<br>
+      <strong>Priscila dos Santos Souza</strong>
+    </p>
+
+    <div class="pix">
+      11943403741
+    </div>
+
+    <button
+      type="button"
+      onclick="copiarPix()">
+      Copiar chave Pix
+    </button>
+
+    <p
+      id="copyState"
+      style="text-align:center;font-size:13px"
+      aria-live="polite">
+    </p>
+
+  </section>
+
+  <!-- EXPERIÊNCIAS DA FESTA -->
+
+  <section
+    id="experiences"
+    class="experiences"
+    hidden>
+
+    <div class="experiences-header">
+
+      <div style="font-size:32px">
+        🌿✨🦁
+      </div>
+
+      <p class="eyebrow">
+        Prepare-se para viver e registrar
+      </p>
+
+      <h2>
+        Experiências da Festa
+      </h2>
+
+      <p>
+        Nosso safári reserva surpresas,
+        diversão e lembranças que vão
+        muito além das fotos tradicionais!
+      </p>
+
+    </div>
+
+    <!-- EXPERIÊNCIA 1: GALERIA -->
+
+    <article class="experience-card">
+
+      <div class="emoji">📸🌿</div>
+
+      <h3>
+        Seja Meus Olhos — Galeria do Ravi
+      </h3>
+
+      <p>
+        Você também faz parte da nossa história!
+        Registre momentos espontâneos da festa
+        e compartilhe seus cliques na nossa
+        galeria especial.
+      </p>
+
+      <p>
+        Assim, o Ravi poderá descobrir essa
+        aventura pelos olhos de quem esteve
+        com ele. 💚
+      </p>
+
+    </article>
+
+    <!-- EXPERIÊNCIA 2: FOTO DA FESTA -->
+
+    <article class="experience-card">
+
+      <div class="emoji">🤳🦁</div>
+
+      <h3>
+        Eu Fui no Safári do Ravi!
+      </h3>
+
+      <p>
+        Prepare o sorriso!
+        Teremos uma câmera especial
+        com uma moldura temática de lembrança.
+      </p>
+
+      <p>
+        Tire suas fotos, entre no clima
+        do safári e leve com você
+        um registro divertido desse dia!
+      </p>
+
+    </article>
+
+    <!-- EXPERIÊNCIA 3: PISCINA -->
+
+    <article class="experience-card">
+
+      <div class="emoji">🌊☀️</div>
+
+      <h3>
+        Piscina — Um mergulho na savana!
+      </h3>
+
+      <p>
+        O calor da savana pede um mergulho!
+        A piscina do espaço estará liberada
+        para quem quiser aproveitar
+        e se refrescar.
+      </p>
+
+      <p>
+        Então prepare a diversão,
+        traga seus trajes de banho
+        e venha aproveitar esse momento
+        especial com a gente! 💦
+      </p>
+
+    </article>
+
+    <!-- EXPERIÊNCIA 4: ALMOÇO -->
+
+    <article class="experience-card">
+
+      <div class="emoji">🍽️🌿</div>
+
+      <h3>
+        Almoço especial na savana
+      </h3>
+
+      <p>
+        Uma grande aventura merece
+        uma celebração deliciosa!
+      </p>
+
+      <p>
+        <strong>
+          Aproveite nosso almoço especial
+          e tudo que preparamos pra vocês
+          com tanto carinho.
+        </strong>
+      </p>
+
+      <p>
+        Queremos que você se sinta
+        em casa, aproveite cada momento
+        e celebre conosco esse dia
+        tão importante. 💚
+      </p>
+
+    </article>
+
+    <!-- EXPERIÊNCIA 5: DIVERSÃO -->
+
+    <article class="experience-card">
+
+      <div class="emoji">🎉📷</div>
+
+      <h3>
+        Sorrisos e momentos inesquecíveis
+      </h3>
+
+      <p>
+        Dê boas risadas, divirta-se muito
+        e aproveite cada cantinho
+        do nosso safári!
+      </p>
+
+      <p>
+        Ah, não esqueça de registrar
+        muitos momentos —
+        <strong>
+          principalmente uma foto
+          com o Ravi!
+        </strong>
+        📷👑
+      </p>
+
+    </article>
+
+    <!-- ENCERRAMENTO -->
+
+    <div class="experience-finale">
+
+      <h3>
+        💚 Sua presença é muito especial!
+      </h3>
+
+      <p>
+        Tudo está sendo preparado com
+        muito amor para celebrar
+        
+ o primeiro aninho do Ravi Noah.
+        Esperamos você para viver essa aventura conosco! 🦁🌿
+      </p>
+    </div>
+
+    <button type="button" class="close-panel" onclick="fecharPainel('experiences')">
+      Fechar experiências
+    </button>
+  </section>
+
+  <button type="button" class="secondary" onclick="reverAventura()">
+    ▶ Rever nossa aventura
+  </button>
+
+  <footer>
+    Feito com amor para o primeiro aninho do Ravi Noah. 💚<br>
+    18 de abril de 2027 · Espaço Recanto do Vale
+  </footer>
+
+</main>
+</section>
+</body>
+</html>
