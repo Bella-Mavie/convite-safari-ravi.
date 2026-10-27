@@ -481,6 +481,11 @@ footer {
 .rsvp-actions{display:flex;gap:10px;margin:12px 0}.rsvp-actions button{flex:1;padding:12px;font-size:13px}
 #rsvpStatus{padding:10px 0;line-height:1.5;font-family:Arial,sans-serif;font-size:14px}
 #rsvpStatus[data-type="error"]{color:#a02c24}#rsvpStatus[data-type="success"]{color:#24643a}
+
+.ravi-existing{background:#edf4e9;border:1px solid #b4c7a6;border-radius:12px;padding:12px;margin:10px 0;font-family:Arial,sans-serif}
+.ravi-existing strong{display:block;color:#244f32}.ravi-existing small{display:block;margin:5px 0;color:#48624c}
+.ravi-existing label{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:8px;color:#804629}
+.ravi-existing input{width:18px;height:18px}.ravi-subheading{font-size:16px;color:#315a3c;margin-top:20px}
 </style>
 
 <script>
@@ -594,65 +599,80 @@ function fecharPainel(id) {
 /* CONFIRMAÇÃO PRIVADA NO SUPABASE — somente chave pública */
 const RAVI_SUPABASE_URL = "https://mynigxatpzownmjduowa.supabase.co";
 const RAVI_SUPABASE_PUBLIC_KEY = "sb_publishable_HrVQAx9MFId56dATTeIteQ_bTM9F4Lk";
-let raviParticipantes = 1;
-function raviStatus(mensagem,tipo="") {
-  const el=document.getElementById("rsvpStatus");
-  el.textContent=mensagem;el.dataset.type=tipo;
+let raviParticipantes=0;
+let raviExistentes=[];
+let raviCarregado=false;
+function raviCodigo(){return new URLSearchParams(window.location.search).get('convite')?.trim()||'';}
+function raviStatus(mensagem,tipo=''){const el=document.getElementById('rsvpStatus');if(el){el.textContent=mensagem;el.dataset.type=tipo;}}
+async function raviRpc(nome,corpo){
+ const resposta=await fetch(RAVI_SUPABASE_URL+'/rest/v1/rpc/'+nome,{
+ method:'POST',headers:{'Content-Type':'application/json','apikey':RAVI_SUPABASE_PUBLIC_KEY},body:JSON.stringify(corpo)});
+ const dados=await resposta.json().catch(()=>null);
+ if(!resposta.ok||dados?.sucesso===false)throw new Error(dados?.message||dados?.mensagem||'Não foi possível consultar o convite.');
+ return dados;
 }
-function adicionarParticipante() {
-  if(raviParticipantes>=20){raviStatus("Para grupos maiores, fale com a organização.","error");return;}
-  raviParticipantes++;
-  const lista=document.getElementById("rsvpPeople");
-  const item=document.createElement("div");item.className="rsvp-person";
-  item.innerHTML='<h3>Participante '+raviParticipantes+'</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="crianca">Criança</option></select></label>';
-  lista.appendChild(item);
+function raviLimparNovos(){document.getElementById('rsvpPeople').replaceChildren();raviParticipantes=0;}
+function adicionarParticipante(){
+ if(raviParticipantes+raviExistentes.length>=30){raviStatus('O limite é de 30 participantes por convite.','error');return;}
+ raviParticipantes++;
+ const item=document.createElement('div');item.className='rsvp-person';
+ item.innerHTML='<h3>Novo participante</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="crianca">Criança</option></select></label>';
+ document.getElementById('rsvpPeople').appendChild(item);
 }
-function removerParticipante() {
-  if(raviParticipantes<=1)return;
-  document.getElementById("rsvpPeople").lastElementChild.remove();raviParticipantes--;
+function removerParticipante(){
+ const lista=document.getElementById('rsvpPeople');if(lista.lastElementChild){lista.lastElementChild.remove();raviParticipantes--;}
 }
-async function confirmarPresenca() {
-  const codigo=new URLSearchParams(window.location.search).get("convite")?.trim() || "";
-  const responsavel=document.getElementById("guest").value.trim();
-  const nomes=[...document.querySelectorAll(".ravi-nome")];
-  const categorias=[...document.querySelectorAll(".ravi-categoria")];
-  const participantes=nomes.map((campo,i)=>({nome:campo.value.trim(),categoria:categorias[i].value}));
-  if(!codigo){raviStatus("Abra o link exclusivo enviado pela organização para confirmar presença.","error");return;}
-  if(!responsavel||participantes.some(p=>!p.nome)){
-    raviStatus("Preencha o responsável e todos os nomes.","error");return;
+function raviExibirExistentes(){
+ const area=document.getElementById('raviExisting');area.replaceChildren();
+ const titulo=document.getElementById('raviExistingTitle');titulo.hidden=!raviExistentes.length;
+ for(const p of raviExistentes){
+  const bloco=document.createElement('div');bloco.className='ravi-existing';
+  const nome=document.createElement('strong');nome.textContent=p.nome;bloco.appendChild(nome);
+  const detalhe=document.createElement('small');detalhe.textContent=(p.categoria==='crianca'?'Criança':'Adulto')+' · Nome já enviado';bloco.appendChild(detalhe);
+  if(!p.retirada_solicitada){
+   const rotulo=document.createElement('label');const caixa=document.createElement('input');caixa.type='checkbox';caixa.className='ravi-retirar';caixa.value=String(p.id);
+   rotulo.append(caixa,document.createTextNode('Solicitar retirada desta pessoa'));bloco.appendChild(rotulo);
+  }else{
+   const aviso=document.createElement('small');aviso.textContent='Retirada solicitada — aguardando a organização';bloco.appendChild(aviso);
   }
-  if(RAVI_SUPABASE_PUBLIC_KEY.startsWith("COLE_AQUI")){
-    raviStatus("A confirmação está em preparação. Ainda falta configurar a chave pública do sistema.","error");return;
-  }
-  const botao=document.getElementById("raviEnviar");botao.disabled=true;
-  raviStatus("Enviando sua confirmação com carinho…");
-  try{
-    const resposta=await fetch(RAVI_SUPABASE_URL+"/rest/v1/rpc/receber_confirmacao_ravi",{
-      method:"POST",headers:{"Content-Type":"application/json","apikey":RAVI_SUPABASE_PUBLIC_KEY},
-      body:JSON.stringify({p_codigo:codigo,p_responsavel:responsavel,p_participantes:participantes})
-    });
-    const dados=await resposta.json().catch(()=>null);
-    if(!resposta.ok){
-      const detalhe=dados?.message||dados?.error_description||dados?.error||dados?.details||"Erro sem detalhes devolvidos pelo servidor";
-      console.error("Falha RSVP Supabase",{status:resposta.status,erro:dados});
-      throw new Error("Erro ao registrar (HTTP "+resposta.status+"): "+String(detalhe));
-    }
-    if(dados&&typeof dados==="object"&&dados.sucesso===false){
-      console.error("RSVP recusado",dados);
-      throw new Error("Solicitação recusada: "+String(dados.mensagem||dados.message||dados.erro||"motivo não informado"));
-    }
-    raviStatus("💚 Recebemos sua solicitação! A organização fará a conferência. Obrigado por participar desta aventura!","success");
-    botao.hidden=true;
-  }catch(e){raviStatus(e.message||"Não foi possível enviar. Tente novamente.","error");}
-  finally{botao.disabled=false;}
+  area.appendChild(bloco);
+ }
 }
-
+async function raviCarregar(){
+ const codigo=raviCodigo();if(!codigo)return;
+ raviStatus('Consultando os nomes já informados…');
+ try{
+  const dados=await raviRpc('consultar_confirmacao_ravi',{p_codigo:codigo});
+  raviExistentes=Array.isArray(dados.participantes)?dados.participantes:[];
+  raviCarregado=true;
+  if(dados.responsavel)document.getElementById('guest').value=dados.responsavel;
+  raviExibirExistentes();raviLimparNovos();
+  if(!raviExistentes.length)adicionarParticipante();
+  document.getElementById('raviEnviar').textContent=raviExistentes.length?'💚 Enviar alterações':'💚 Enviar solicitação de presença';
+  raviStatus(raviExistentes.length?'Confira os nomes enviados. Você pode acrescentar pessoas ou solicitar retiradas.':'Preencha os nomes para participar da aventura.','success');
+ }catch(e){raviStatus(e.message||'Não foi possível consultar.','error');}
+}
+async function confirmarPresenca(){
+ const codigo=raviCodigo();const responsavel=document.getElementById('guest').value.trim();
+ const novos=[...document.querySelectorAll('.rsvp-person')].map(item=>({nome:item.querySelector('.ravi-nome').value.trim(),categoria:item.querySelector('.ravi-categoria').value}));
+ const retiradas=[...document.querySelectorAll('.ravi-retirar:checked')].map(x=>Number(x.value));
+ if(!codigo){raviStatus('Abra o link exclusivo enviado pela organização.','error');return;}
+ if(responsavel.length<3){raviStatus('Informe o nome completo do responsável.','error');return;}
+ if(novos.some(p=>!p.nome||p.nome.split(/\s+/).length<2)){raviStatus('Preencha nome e sobrenome de cada novo participante, ou remova a linha vazia.','error');return;}
+ if(raviExistentes.length&&novos.length===0&&retiradas.length===0){raviStatus('Nenhuma alteração selecionada.','error');return;}
+ if(!raviExistentes.length&&!novos.length){raviStatus('Adicione pelo menos um participante.','error');return;}
+ const botao=document.getElementById('raviEnviar');botao.disabled=true;raviStatus('Salvando com carinho…');
+ try{
+  if(raviExistentes.length){await raviRpc('atualizar_confirmacao_ravi',{p_codigo:codigo,p_responsavel:responsavel,p_adicoes:novos,p_retiradas:retiradas});}
+  else{await raviRpc('receber_confirmacao_ravi',{p_codigo:codigo,p_responsavel:responsavel,p_participantes:novos});}
+  await raviCarregar();raviStatus('💚 Recebemos suas informações! As alterações serão analisadas pela organização.','success');
+ }catch(e){raviStatus(e.message||'Não foi possível enviar. Tente novamente.','error');}
+ finally{botao.disabled=false;}
+}
 document.addEventListener('DOMContentLoaded',()=>{
-  const hasCode=Boolean(new URLSearchParams(window.location.search).get('convite')?.trim());
-  const notice=document.getElementById('raviLinkAviso');
-  if(notice)notice.hidden=hasCode;
-  const send=document.getElementById('raviEnviar');
-  if(send)send.disabled=!hasCode;
+ const codigo=raviCodigo();const notice=document.getElementById('raviLinkAviso');if(notice)notice.hidden=!!codigo;
+ const send=document.getElementById('raviEnviar');if(send)send.disabled=!codigo;
+ if(codigo)raviCarregar();else adicionarParticipante();
 });
 
 /* COPIAR PIX */
@@ -886,14 +906,14 @@ function reverAventura() {
 
   <section id="rsvp" class="panel" hidden>
     <h2>🌿 Confirme sua aventura!</h2>
-    <p class="rsvp-intro">Escreva os nomes de quem vai celebrar o primeiro aninho do Ravi Noah conosco. Não é necessário digitar nenhum código! 🦁💚</p>
+    <p class="rsvp-intro">Veja os nomes já enviados, acrescente familiares ou solicite uma retirada. Basta usar o mesmo link exclusivo! 🦁💚</p>
     <p id="raviLinkAviso" class="rsvp-note" hidden>Abra o link exclusivo que você recebeu da organização para confirmar presença.</p>
     <label class="field">Nome do responsável<input id="guest" type="text" maxlength="120" autocomplete="name" placeholder="Seu nome completo"></label>
-    <div id="rsvpPeople"><div class="rsvp-person"><h3>Participante 1</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="crianca">Criança</option></select></label></div></div>
+    <h3 id="raviExistingTitle" class="ravi-subheading" hidden>🌿 Pessoas já informadas</h3><div id="raviExisting"></div><h3 class="ravi-subheading">✨ Acrescentar participantes</h3><div id="rsvpPeople"></div>
     <div class="rsvp-actions"><button type="button" onclick="adicionarParticipante()">＋ Participante</button><button type="button" onclick="removerParticipante()">− Remover</button></div>
     <button id="raviEnviar" type="button" onclick="confirmarPresenca()">💚 Enviar solicitação de presença</button>
     <p id="rsvpStatus" role="status" aria-live="polite"></p>
-    <p class="rsvp-note">A solicitação será conferida pela organização. O envio não representa confirmação automática. Seus dados não ficam visíveis aos demais convidados.</p>
+    <p class="rsvp-note">As alterações serão conferidas pela organização. Solicitar uma retirada não cancela automaticamente uma autorização. Quem tiver acesso ao link exclusivo poderá ver os nomes já informados; não compartilhe o link fora da família.</p>
   </section>
 
   <!-- SUGESTÕES DE PRESENTES -->
