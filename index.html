@@ -632,8 +632,15 @@ async function confirmarPresenca() {
       body:JSON.stringify({p_codigo:codigo,p_responsavel:responsavel,p_participantes:participantes})
     });
     const dados=await resposta.json().catch(()=>null);
-    if(!resposta.ok){throw new Error("Não foi possível registrar a solicitação. Confira o link recebido e tente novamente.");}
-    if(dados&&typeof dados==="object"&&dados.sucesso===false){throw new Error("Não foi possível registrar a solicitação. Confira os dados e tente novamente.");}
+    if(!resposta.ok){
+      const detalhe=dados?.message||dados?.error_description||dados?.error||dados?.details||"Erro sem detalhes devolvidos pelo servidor";
+      console.error("Falha RSVP Supabase",{status:resposta.status,erro:dados});
+      throw new Error("Erro ao registrar (HTTP "+resposta.status+"): "+String(detalhe));
+    }
+    if(dados&&typeof dados==="object"&&dados.sucesso===false){
+      console.error("RSVP recusado",dados);
+      throw new Error("Solicitação recusada: "+String(dados.mensagem||dados.message||dados.erro||"motivo não informado"));
+    }
     raviStatus("💚 Recebemos sua solicitação! A organização fará a conferência. Obrigado por participar desta aventura!","success");
     botao.hidden=true;
   }catch(e){raviStatus(e.message||"Não foi possível enviar. Tente novamente.","error");}
