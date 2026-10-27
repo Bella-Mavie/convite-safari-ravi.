@@ -612,13 +612,14 @@ function removerParticipante() {
   document.getElementById("rsvpPeople").lastElementChild.remove();raviParticipantes--;
 }
 async function confirmarPresenca() {
-  const codigo=document.getElementById("raviCodigo").value.trim();
+  const codigo=new URLSearchParams(window.location.search).get("convite")?.trim() || "";
   const responsavel=document.getElementById("guest").value.trim();
   const nomes=[...document.querySelectorAll(".ravi-nome")];
   const categorias=[...document.querySelectorAll(".ravi-categoria")];
   const participantes=nomes.map((campo,i)=>({nome_completo:campo.value.trim(),categoria:categorias[i].value}));
-  if(!codigo||!responsavel||participantes.some(p=>!p.nome_completo)){
-    raviStatus("Preencha o código, o responsável e todos os nomes.","error");return;
+  if(!codigo){raviStatus("Abra o link exclusivo enviado pela organização para confirmar presença.","error");return;}
+  if(!responsavel||participantes.some(p=>!p.nome_completo)){
+    raviStatus("Preencha o responsável e todos os nomes.","error");return;
   }
   if(RAVI_SUPABASE_PUBLIC_KEY.startsWith("COLE_AQUI")){
     raviStatus("A confirmação está em preparação. Ainda falta configurar a chave pública do sistema.","error");return;
@@ -631,13 +632,21 @@ async function confirmarPresenca() {
       body:JSON.stringify({p_codigo:codigo,p_responsavel:responsavel,p_participantes:participantes})
     });
     const dados=await resposta.json().catch(()=>null);
-    if(!resposta.ok){throw new Error("Não foi possível registrar a solicitação. Confira o código e tente novamente.");}
+    if(!resposta.ok){throw new Error("Não foi possível registrar a solicitação. Confira o link recebido e tente novamente.");}
     if(dados&&typeof dados==="object"&&dados.sucesso===false){throw new Error("Não foi possível registrar a solicitação. Confira os dados e tente novamente.");}
     raviStatus("💚 Recebemos sua solicitação! A organização fará a conferência. Obrigado por participar desta aventura!","success");
     botao.hidden=true;
   }catch(e){raviStatus(e.message||"Não foi possível enviar. Tente novamente.","error");}
   finally{botao.disabled=false;}
 }
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const hasCode=Boolean(new URLSearchParams(window.location.search).get('convite')?.trim());
+  const notice=document.getElementById('raviLinkAviso');
+  if(notice)notice.hidden=hasCode;
+  const send=document.getElementById('raviEnviar');
+  if(send)send.disabled=!hasCode;
+});
 
 /* COPIAR PIX */
 
@@ -870,8 +879,8 @@ function reverAventura() {
 
   <section id="rsvp" class="panel" hidden>
     <h2>🌿 Confirme sua aventura!</h2>
-    <p class="rsvp-intro">Cada família recebeu um código especial. Informe o seu e os nomes de quem deseja celebrar o primeiro aninho do Ravi Noah conosco. 🦁💚</p>
-    <label class="field">Código exclusivo da família<input id="raviCodigo" type="text" maxlength="100" autocomplete="off" placeholder="Código recebido no convite"></label>
+    <p class="rsvp-intro">Escreva os nomes de quem vai celebrar o primeiro aninho do Ravi Noah conosco. Não é necessário digitar nenhum código! 🦁💚</p>
+    <p id="raviLinkAviso" class="rsvp-note" hidden>Abra o link exclusivo que você recebeu da organização para confirmar presença.</p>
     <label class="field">Nome do responsável<input id="guest" type="text" maxlength="120" autocomplete="name" placeholder="Seu nome completo"></label>
     <div id="rsvpPeople"><div class="rsvp-person"><h3>Participante 1</h3><label class="field">Nome completo<input class="ravi-nome" type="text" maxlength="120" autocomplete="off" placeholder="Nome e sobrenome"></label><label class="field">Categoria<select class="ravi-categoria"><option value="adulto">Adulto</option><option value="adolescente">Adolescente</option><option value="crianca">Criança</option><option value="bebe">Bebê</option></select></label></div></div>
     <div class="rsvp-actions"><button type="button" onclick="adicionarParticipante()">＋ Participante</button><button type="button" onclick="removerParticipante()">− Remover</button></div>
