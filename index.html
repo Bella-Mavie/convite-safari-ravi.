@@ -634,9 +634,20 @@ function raviExibirExistentes(){
    rotulo.append(caixa,document.createTextNode('Solicitar retirada desta pessoa'));bloco.appendChild(rotulo);
   }else{
    const aviso=document.createElement('small');aviso.textContent='Retirada solicitada — aguardando a organização';bloco.appendChild(aviso);
+    const voltar=document.createElement('button');voltar.type='button';voltar.textContent='💚 Solicitar presença novamente';voltar.style.marginTop='10px';voltar.addEventListener('click',()=>raviSolicitarRetorno(p.id,voltar));bloco.appendChild(voltar);
   }
   area.appendChild(bloco);
  }
+}
+async function raviSolicitarRetorno(id,botao){
+ const codigo=raviCodigo();
+ if(!codigo){raviStatus('Abra o convite exclusivo da família.','error');return;}
+ if(!window.confirm('Deseja solicitar novamente a presença desta pessoa? A organização analisará o pedido.'))return;
+ botao.disabled=true;raviStatus('Enviando solicitação de retorno…');
+ try{
+  await raviRpc('solicitar_retorno_ravi',{p_codigo:codigo,p_participante_id:id});
+  await raviCarregar();raviStatus('💚 Pedido de retorno enviado! A organização irá analisar.','success');
+ }catch(e){raviStatus(e.message||'Não foi possível solicitar o retorno.','error');botao.disabled=false;}
 }
 async function raviCarregar(){
  const codigo=raviCodigo();if(!codigo)return;
